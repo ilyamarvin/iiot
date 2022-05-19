@@ -47,7 +47,7 @@ def isCheckedLevel():
 
 
 server = Server()
-url = "opc.tcp://0.0.0.0:4840"
+url = "opc.tcp://localhost:4840"
 server.set_endpoint(url)
 name = "Industrial Internet of Things"
 add_space = server.register_namespace(name)
