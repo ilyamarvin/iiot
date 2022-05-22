@@ -3,12 +3,13 @@ import paho.mqtt.client as mqtt
 import time
 import json
 import psycopg2
+import datetime
 
 # Параметры базы данных
-DB_HOST = ''
-DB_NAME = ''
-DB_USER = ''
-DB_PASS = ''
+DB_HOST = 'ec2-63-32-248-14.eu-west-1.compute.amazonaws.com'
+DB_NAME = 'd974frae2u76bq'
+DB_USER = 'kemiwygyzjgseg'
+DB_PASS = '282e49b00caaf11338cfc6b8c1451c827637eea11348c139860f5c370538c2ec'
 
 # Соединение с OPC UA сервером
 url = "opc.tcp://localhost:4840"
@@ -51,6 +52,14 @@ while True:
         data_out = json.dumps(data)
         iot_hub_client.publish(topic, data_out, 0)
 
+        cur.execute("INSERT INTO data (id_sensor, date, time, value) VALUES (%s, %s, %s, %s)",
+                    (1, datetime.date.today(), time.strftime("%H:%M:%S"), int(temperature)))
+        cur.execute("INSERT INTO data (id_sensor, date, time, value) VALUES (%s, %s, %s, %s)",
+                    (2, datetime.date.today(), time.strftime("%H:%M:%S"), int(pressure)))
+        cur.execute("INSERT INTO data (id_sensor, date, time, value) VALUES (%s, %s, %s, %s)",
+                    (3, datetime.date.today(), time.strftime("%H:%M:%S"), int(height)))
+
+        conn.commit()
 
         time.sleep(2)
 
